@@ -18,7 +18,8 @@ class Report(models.Model):
         local_context = context.copy()
         local_context['must_skip_send_to_printer'] = True
         for rec_id in self.with_context(local_context):
-            document = rec_id.get_pdf(report_name, html=html, data=data)
+            records = self.env[context["active_model"]].browse(context["active_ids"])
+            document = rec_id.get_pdf(records, report_name) #, html=html, data=data)
             report = self._get_report_from_name(report_name)
             behaviour = report.behaviour()[report.id]
             printer = behaviour['printer']
